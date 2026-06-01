@@ -1,0 +1,28 @@
+/* ==========================================================================
+   FFSS Effect: Hyperspace Tunnel — page-specific styles
+   Most of the visual chrome lives in effect-hud.css; this file is for
+   tunnel-only tweaks.
+   ========================================================================== */
+
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: #000;
+    height: 100%;
+}
+
+/* Subtle vignette over the canvas to ground the tunnel mouth in deep black.
+   The shader handles the main vignette, but this layer guarantees the page
+   feels framed even before WebGL boots. */
+body.ffss-effect-body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 5;
+    background: radial-gradient(ellipse at center,
+        rgba(0,0,0,0) 55%,
+        rgba(0,0,0,0.55) 100%);
+    mix-blend-mode: multiply;
+}

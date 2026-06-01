@@ -1,0 +1,106 @@
+/* ==========================================================================
+   FFSS Effect: Terminal
+   Phosphor-green-on-black fake terminal with subtle CRT scanlines.
+   ========================================================================== */
+
+.term-body {
+    background: #050605;
+    color: #00ff66;
+    font-family: 'JetBrains Mono', ui-monospace, 'Courier New', monospace;
+    overflow: hidden;
+}
+
+.term-screen {
+    position: fixed;
+    inset: 0;
+    background:
+        radial-gradient(ellipse at center, #0a0f0a 0%, #050605 70%, #000 100%);
+    overflow: hidden;
+}
+
+.term-output {
+    position: absolute;
+    inset: 0;
+    padding: 2rem 2.5rem 3.5rem;
+    overflow: hidden;
+    font-size: 0.9375rem;
+    line-height: 1.45;
+    letter-spacing: 0.01em;
+    color: #00ff66;
+    text-shadow: 0 0 6px rgba(0, 255, 102, 0.45);
+    white-space: pre;
+    word-break: break-all;
+    -webkit-font-smoothing: antialiased;
+}
+
+.term-output .line {
+    display: block;
+    min-height: 1.3em;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+/* Color classes for ANSI-ish styling */
+.term-green   { color: #00ff66; }
+.term-cyan    { color: #5cf6ff; text-shadow: 0 0 6px rgba(92, 246, 255, 0.45); }
+.term-red     { color: #ff4d4d; text-shadow: 0 0 6px rgba(255, 77, 77, 0.45); }
+.term-yellow  { color: #ffd24d; text-shadow: 0 0 6px rgba(255, 210, 77, 0.45); }
+.term-blue    { color: #6c9bff; text-shadow: 0 0 6px rgba(108, 155, 255, 0.45); }
+.term-magenta { color: #ff7be0; text-shadow: 0 0 6px rgba(255, 123, 224, 0.45); }
+.term-white   { color: #f5fff8; text-shadow: 0 0 6px rgba(245, 255, 248, 0.55); font-weight: 700; }
+.term-dim     { color: #4a8a5e; text-shadow: none; }
+
+/* Blinking cursor */
+.term-cursor {
+    display: inline-block;
+    width: 0.55em;
+    height: 1em;
+    background: #00ff66;
+    box-shadow: 0 0 8px rgba(0, 255, 102, 0.7);
+    vertical-align: text-bottom;
+    margin-left: 1px;
+    animation: term-blink 1s steps(2, end) infinite;
+}
+
+@keyframes term-blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+}
+
+/* CRT scanlines — 1px dark stripes every 3px */
+.term-scanlines {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0) 0,
+        rgba(0, 0, 0, 0) 2px,
+        rgba(0, 0, 0, 0.18) 3px
+    );
+    mix-blend-mode: multiply;
+    z-index: 2;
+}
+
+/* Subtle CRT vignette */
+.term-vignette {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(ellipse at center, transparent 50%, rgba(0, 0, 0, 0.6) 100%);
+    z-index: 3;
+}
+
+/* Mobile tweak — smaller font so lines don't wrap so brutally */
+@media (max-width: 640px) {
+    .term-output {
+        padding: 1rem 1rem 2.5rem;
+        font-size: 0.75rem;
+        line-height: 1.4;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .term-cursor { animation: none; opacity: 1; }
+}

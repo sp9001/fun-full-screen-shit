@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template>
+  <name>Fun Full Screen Shit</name>
+  <author>Custom</author>
+  <version>1.0</version>
+  <tested>6.0.6</tested>
+  <ultramenu>0</ultramenu>
+  <dbnav>0</dbnav>
+  <dropnav>1</dropnav>
+  <filenav>1</filenav>
+  <navstyle>Default</navstyle>
+  <library>Bootstrap 5</library>
+  <customizer>0</customizer>
+  <navopts>Default</navopts>
+</template>

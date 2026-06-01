@@ -1,0 +1,37 @@
+/* ==========================================================================
+   FFSS Effect: Particle Storm — page-specific styles
+   ========================================================================== */
+
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: #02030a;
+    height: 100%;
+    cursor: crosshair;
+}
+
+/* Vignette + faint star-field gradient backdrop. The particle field renders
+   on top with additive blending, so a slight ambient gradient grounds the
+   composition. */
+body.ffss-effect-body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background:
+        radial-gradient(ellipse at 30% 30%, rgba(0, 240, 255, 0.05), transparent 60%),
+        radial-gradient(ellipse at 70% 70%, rgba(255, 0, 230, 0.05), transparent 60%);
+}
+
+body.ffss-effect-body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 6;
+    background: radial-gradient(ellipse at center,
+        rgba(0,0,0,0) 55%,
+        rgba(0,0,0,0.55) 100%);
+}

@@ -1,0 +1,169 @@
+/* ==========================================================================
+   FFSS Effect HUD
+   Shared overlay (FPS, close button, fullscreen hint) injected by
+   fullscreen-helper.js. Loaded by every effect page.
+   ========================================================================== */
+
+.ffss-effect-body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: #000;
+    color: #f5f6fa;
+    font-family: 'Lexend', system-ui, sans-serif;
+    cursor: default;
+}
+
+#stage {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    display: block;
+    background: #000;
+    touch-action: none;
+}
+
+/* --- HUD wrapper (just an event-passthrough container) ------------------ */
+.ffss-hud {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 10;
+    transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 1;
+}
+
+.ffss-hud--idle { opacity: 0; }
+.ffss-hud--idle .ffss-hud__close,
+.ffss-hud--idle .ffss-hud__fps,
+.ffss-hud--idle .ffss-hud__hint { pointer-events: none; }
+
+/* --- FPS counter (top-left) -------------------------------------------- */
+.ffss-hud__fps {
+    position: absolute;
+    top: 1.25rem;
+    left: 1.25rem;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    padding: 0.5rem 0.875rem;
+    background: rgba(10, 10, 18, 0.55);
+    backdrop-filter: blur(10px) saturate(160%);
+    -webkit-backdrop-filter: blur(10px) saturate(160%);
+    border: 1px solid rgba(0, 240, 255, 0.18);
+    border-radius: 0.5rem;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 0.8125rem;
+    letter-spacing: 0.06em;
+    box-shadow: 0 0 16px rgba(0, 240, 255, 0.08);
+    pointer-events: auto;
+}
+
+.ffss-hud__fps-label {
+    color: #6cf8ff;
+    text-transform: uppercase;
+    font-weight: 700;
+    text-shadow: 0 0 8px rgba(0, 240, 255, 0.45);
+}
+
+.ffss-hud__fps-value {
+    color: #f5f6fa;
+    font-weight: 700;
+    font-size: 0.9375rem;
+    min-width: 2ch;
+    text-align: right;
+}
+
+.ffss-hud__fps-name {
+    margin-left: 0.5rem;
+    padding-left: 0.625rem;
+    border-left: 1px solid rgba(255, 255, 255, 0.12);
+    color: #9da1b3;
+    font-family: 'Lexend', system-ui, sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+/* --- Close button (top-right) ------------------------------------------ */
+.ffss-hud__close {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(10, 10, 18, 0.55);
+    backdrop-filter: blur(10px) saturate(160%);
+    -webkit-backdrop-filter: blur(10px) saturate(160%);
+    border: 1px solid rgba(255, 0, 230, 0.22);
+    border-radius: 50%;
+    color: #ff66f0;
+    font-size: 1.5rem;
+    line-height: 1;
+    text-decoration: none;
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+                box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+                background 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+.ffss-hud__close:hover {
+    transform: scale(1.06);
+    background: rgba(255, 0, 230, 0.18);
+    box-shadow: 0 0 24px rgba(255, 0, 230, 0.4);
+    color: #ffffff;
+}
+
+.ffss-hud__close:focus-visible {
+    outline: 2px solid #ff00e6;
+    outline-offset: 3px;
+}
+
+/* --- Bottom hint -------------------------------------------------------- */
+.ffss-hud__hint {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0.5rem 1rem;
+    background: rgba(10, 10, 18, 0.5);
+    backdrop-filter: blur(10px) saturate(160%);
+    -webkit-backdrop-filter: blur(10px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 999px;
+    color: #d8dae3;
+    font-size: 0.8125rem;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    pointer-events: auto;
+}
+
+.ffss-hud__hint kbd {
+    display: inline-block;
+    padding: 0.0625rem 0.4375rem;
+    margin: 0 0.125rem;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 0.25rem;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 0.6875rem;
+    color: #f5f6fa;
+}
+
+@media (max-width: 540px) {
+    .ffss-hud__fps-name { display: none; }
+    .ffss-hud__hint { font-size: 0.6875rem; padding: 0.375rem 0.75rem; }
+    .ffss-hud__fps,
+    .ffss-hud__close { top: 0.75rem; }
+    .ffss-hud__fps { left: 0.75rem; }
+    .ffss-hud__close { right: 0.75rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ffss-hud { transition: none; }
+}

@@ -1,0 +1,24 @@
+/* ==========================================================================
+   FFSS Effect: Plasma Flow — page-specific styles
+   ========================================================================== */
+
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: #02030a;
+    height: 100%;
+    cursor: crosshair;     /* signals "mouse is interactive" without UI clutter */
+}
+
+/* Slight tint so the canvas reads as warm-on-cool even before WebGL boots. */
+body.ffss-effect-body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 5;
+    background: radial-gradient(ellipse at center,
+        rgba(0,0,0,0) 60%,
+        rgba(0,0,0,0.4) 100%);
+}

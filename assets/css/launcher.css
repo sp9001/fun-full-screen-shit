@@ -1,0 +1,439 @@
+/* ==========================================================================
+   FFSS Launcher (homepage)
+   Hero + 3-card effect gallery. Pure CSS gradient previews — no images.
+   ========================================================================== */
+
+/* --- Hero --------------------------------------------------------------- */
+.ffss-hero {
+    width: 100%;
+    padding: 5rem 1.25rem 4rem;
+    text-align: center;
+    overflow: hidden;
+}
+
+.ffss-hero__title {
+    font-family: 'Lexend', sans-serif;
+    font-weight: 800;
+    font-size: clamp(2.5rem, 8vw + 0.5rem, 6rem);
+    letter-spacing: -0.03em;
+    line-height: 0.95;
+    background: linear-gradient(120deg,
+        var(--brand-primary) 0%,
+        var(--gray-50) 35%,
+        var(--gray-50) 65%,
+        var(--brand-secondary) 100%);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    animation: ffss-hero-shimmer 8s ease-in-out infinite;
+    text-shadow: 0 0 60px rgba(0, 240, 255, 0.15);
+}
+
+@keyframes ffss-hero-shimmer {
+    0%, 100% { background-position: 0% 50%; }
+    50%      { background-position: 100% 50%; }
+}
+
+.ffss-hero__subtitle {
+    margin-top: 1.25rem;
+    font-size: clamp(1rem, 1.2vw + 0.5rem, 1.25rem);
+    color: var(--gray-200);
+    font-weight: 400;
+    letter-spacing: 0.04em;
+}
+
+.ffss-hero__subtitle::before,
+.ffss-hero__subtitle::after {
+    content: '— ';
+    color: var(--brand-primary);
+    opacity: 0.6;
+}
+.ffss-hero__subtitle::after { content: ' —'; color: var(--brand-secondary); }
+
+@media (min-width: 768px) {
+    .ffss-hero { padding: 7rem 2rem 5rem; }
+}
+
+/* --- Gallery ------------------------------------------------------------ */
+.ffss-gallery {
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 2rem 1.25rem 4rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+@media (min-width: 640px) {
+    .ffss-gallery { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 1024px) {
+    .ffss-gallery {
+        grid-template-columns: repeat(6, 1fr);
+        gap: 2rem;
+        padding: 3rem 2rem 6rem;
+    }
+    /* Row 1: three cards spanning 2 columns each (6/3 = 2) */
+    .ffss-gallery > .ffss-card:nth-child(-n+3) { grid-column: span 2; }
+    /* Row 2: two cards spanning 2 columns, with a 1-column gap on each side to center them */
+    .ffss-gallery > .ffss-card:nth-child(4)    { grid-column: 2 / span 2; }
+    .ffss-gallery > .ffss-card:nth-child(5)    { grid-column: 4 / span 2; }
+}
+
+/* --- Effect Card -------------------------------------------------------- */
+.ffss-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: var(--brand-bg-card);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    text-decoration: none;
+    color: var(--gray-50);
+    transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
+    box-shadow: var(--shadow);
+}
+
+.ffss-card:hover,
+.ffss-card:focus-visible {
+    transform: translateY(-6px) scale(1.015);
+    border-color: rgba(0, 240, 255, 0.25);
+    box-shadow: var(--shadow-lg);
+    color: var(--gray-50);
+}
+
+.ffss-card:focus-visible { outline: 2px solid var(--brand-primary); outline-offset: 4px; }
+
+/* Animated gradient preview area (CSS-only, no images) */
+.ffss-card__preview {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: #000;
+}
+
+.ffss-card__preview::before,
+.ffss-card__preview::after {
+    content: '';
+    position: absolute;
+    inset: -25%;
+    border-radius: 50%;
+    filter: blur(40px);
+    opacity: 0.85;
+    will-change: transform;
+}
+
+/* Subtle scan-line texture over the gradient — hints at "shader output" */
+.ffss-card__preview::after {
+    inset: 0;
+    border-radius: 0;
+    filter: none;
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(255, 255, 255, 0.025) 0px,
+        rgba(255, 255, 255, 0.025) 1px,
+        transparent 1px,
+        transparent 3px
+    );
+    opacity: 1;
+    mix-blend-mode: overlay;
+}
+
+/* --- Variant: Tunnel (cyan -> magenta, radial pulse) -------------------- */
+.ffss-card--tunnel .ffss-card__preview {
+    background:
+        radial-gradient(circle at 50% 50%, var(--brand-primary) 0%, transparent 35%),
+        radial-gradient(circle at 50% 50%, var(--brand-secondary) 0%, transparent 60%),
+        radial-gradient(circle at 50% 50%, var(--brand-accent) 0%, #050510 80%);
+    animation: ffss-tunnel-pulse 6s ease-in-out infinite;
+}
+
+.ffss-card--tunnel .ffss-card__preview::before {
+    background: conic-gradient(from 0deg,
+        var(--brand-primary), var(--brand-secondary),
+        var(--brand-primary), var(--brand-secondary));
+    mix-blend-mode: screen;
+    animation: ffss-tunnel-spin 12s linear infinite;
+    opacity: 0.45;
+}
+
+@keyframes ffss-tunnel-pulse {
+    0%, 100% { background-size: 100% 100%, 100% 100%, 100% 100%; }
+    50%      { background-size: 140% 140%, 80% 80%,   120% 120%; }
+}
+
+@keyframes ffss-tunnel-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* --- Variant: Particles (magenta -> purple, drifting blobs) ------------- */
+.ffss-card--particles .ffss-card__preview {
+    background: radial-gradient(circle at 50% 50%, #1a0a1f 0%, #050510 100%);
+}
+
+.ffss-card--particles .ffss-card__preview::before {
+    background: radial-gradient(circle, var(--brand-secondary), transparent 60%);
+    animation: ffss-particles-drift-a 9s ease-in-out infinite;
+}
+
+.ffss-card--particles .ffss-card__preview .ffss-card__preview-extra {
+    position: absolute;
+    inset: -25%;
+    background: radial-gradient(circle, var(--brand-accent), transparent 60%);
+    border-radius: 50%;
+    filter: blur(50px);
+    opacity: 0.7;
+    animation: ffss-particles-drift-b 11s ease-in-out infinite;
+}
+
+@keyframes ffss-particles-drift-a {
+    0%, 100% { transform: translate(-10%, -5%) scale(1); }
+    50%      { transform: translate(15%, 10%) scale(1.2); }
+}
+
+@keyframes ffss-particles-drift-b {
+    0%, 100% { transform: translate(15%, 10%) scale(1.1); }
+    50%      { transform: translate(-15%, -10%) scale(0.9); }
+}
+
+/* --- Variant: Plasma (cyan -> teal, flowing waves) ---------------------- */
+.ffss-card--plasma .ffss-card__preview {
+    background:
+        linear-gradient(120deg, #003a44 0%, #001b30 100%);
+}
+
+.ffss-card--plasma .ffss-card__preview::before {
+    inset: -10%;
+    border-radius: 0;
+    background: conic-gradient(from 90deg at 30% 70%,
+        var(--brand-primary) 0deg,
+        #00ffaa 90deg,
+        var(--brand-primary-dark) 180deg,
+        var(--brand-primary) 270deg,
+        var(--brand-primary) 360deg);
+    filter: blur(28px);
+    opacity: 0.7;
+    animation: ffss-plasma-flow 10s ease-in-out infinite;
+}
+
+@keyframes ffss-plasma-flow {
+    0%, 100% { transform: translate(-5%, -5%) rotate(0deg) scale(1.1); }
+    33%      { transform: translate(10%, 5%)  rotate(60deg) scale(1.3); }
+    66%      { transform: translate(-8%, 8%)  rotate(-30deg) scale(1.2); }
+}
+
+/* --- Card content ------------------------------------------------------- */
+.ffss-card__body {
+    padding: 1.5rem 1.5rem 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    flex: 1;
+}
+
+.ffss-card__eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--brand-primary);
+    opacity: 0.85;
+}
+
+.ffss-card--particles .ffss-card__eyebrow { color: var(--brand-secondary); }
+.ffss-card--plasma    .ffss-card__eyebrow { color: var(--brand-primary-light); }
+.ffss-card--terminal  .ffss-card__eyebrow { color: #00ff66; }
+.ffss-card--dashboard .ffss-card__eyebrow { color: #ffaa00; }
+
+.ffss-card__title {
+    font-size: 1.375rem;
+    font-weight: 700;
+    color: var(--gray-50);
+    letter-spacing: -0.01em;
+}
+
+.ffss-card__desc {
+    font-size: 0.9375rem;
+    color: var(--gray-200);
+    line-height: 1.55;
+    flex: 1;
+}
+
+.ffss-card__cta {
+    margin-top: 0.75rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gray-50);
+    transition: gap var(--transition), color var(--transition);
+}
+
+.ffss-card__cta-arrow {
+    display: inline-block;
+    transition: transform var(--transition);
+}
+
+.ffss-card:hover .ffss-card__cta { gap: 0.875rem; color: var(--brand-primary); }
+.ffss-card:hover .ffss-card__cta-arrow { transform: translateX(4px); }
+.ffss-card--particles:hover .ffss-card__cta { color: var(--brand-secondary); }
+.ffss-card--plasma:hover    .ffss-card__cta { color: var(--brand-primary-light); }
+.ffss-card--terminal:hover  .ffss-card__cta { color: #00ff66; }
+.ffss-card--dashboard:hover .ffss-card__cta { color: #ffaa00; }
+
+/* --- Variant: Terminal (phosphor green on near-black) ------------------- */
+.ffss-card--terminal .ffss-card__preview {
+    background:
+        radial-gradient(ellipse at 50% 60%, rgba(0, 255, 102, 0.12) 0%, transparent 60%),
+        linear-gradient(180deg, #020806 0%, #000300 100%);
+}
+
+.ffss-card--terminal .ffss-card__preview::before {
+    content: none;
+}
+
+.ffss-card--terminal .ffss-card__preview-text {
+    position: absolute;
+    inset: 0;
+    padding: 1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #00ff66;
+    text-shadow: 0 0 6px rgba(0, 255, 102, 0.55);
+    overflow: hidden;
+    z-index: 1;
+}
+
+.ffss-card--terminal .ffss-card__preview-text span {
+    opacity: 0;
+    white-space: nowrap;
+    animation: ffss-terminal-typein 8s steps(1, end) infinite;
+}
+
+.ffss-card--terminal .ffss-card__preview-text span:nth-child(1) { animation-delay: 0.0s; }
+.ffss-card--terminal .ffss-card__preview-text span:nth-child(2) { animation-delay: 0.6s; }
+.ffss-card--terminal .ffss-card__preview-text span:nth-child(3) { animation-delay: 1.2s; }
+.ffss-card--terminal .ffss-card__preview-text span:nth-child(4) { animation-delay: 1.8s; }
+.ffss-card--terminal .ffss-card__preview-text span:nth-child(5) { animation-delay: 2.4s; }
+.ffss-card--terminal .ffss-card__preview-text span:nth-child(6) {
+    animation: ffss-terminal-typein 8s steps(1, end) infinite, ffss-terminal-cursor 1s steps(2, end) infinite;
+    animation-delay: 3.0s, 3.0s;
+}
+
+@keyframes ffss-terminal-typein {
+    0%, 4%        { opacity: 0; }
+    5%, 90%       { opacity: 1; }
+    92%, 100%     { opacity: 0; }
+}
+
+@keyframes ffss-terminal-cursor {
+    0%, 49%   { box-shadow: inset -6px 0 0 0 #00ff66; }
+    50%, 100% { box-shadow: none; }
+}
+
+/* --- Variant: Dashboard (NOC amber w/ status dots + line graph) --------- */
+.ffss-card--dashboard .ffss-card__preview {
+    background:
+        radial-gradient(ellipse at 30% 30%, rgba(255, 170, 0, 0.18) 0%, transparent 55%),
+        linear-gradient(160deg, #1a1205 0%, #050402 100%);
+}
+
+.ffss-card--dashboard .ffss-card__preview::before {
+    /* Faint grid overlay */
+    inset: 0;
+    border-radius: 0;
+    filter: none;
+    opacity: 0.35;
+    background:
+        repeating-linear-gradient(0deg,
+            rgba(255, 170, 0, 0.08) 0px,
+            rgba(255, 170, 0, 0.08) 1px,
+            transparent 1px, transparent 24px),
+        repeating-linear-gradient(90deg,
+            rgba(255, 170, 0, 0.08) 0px,
+            rgba(255, 170, 0, 0.08) 1px,
+            transparent 1px, transparent 24px);
+    mix-blend-mode: normal;
+}
+
+.ffss-card--dashboard .ffss-card__preview-graph {
+    position: absolute;
+    left: 8%;
+    right: 8%;
+    bottom: 18%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #ffaa00, transparent);
+    box-shadow: 0 0 12px rgba(255, 170, 0, 0.7);
+    z-index: 2;
+    /* Mask draws a jagged line graph silhouette via gradient stops */
+    mask-image: linear-gradient(90deg, transparent 0%, #000 20%, #000 80%, transparent 100%);
+    animation: ffss-dashboard-sweep 4s ease-in-out infinite;
+}
+
+.ffss-card--dashboard .ffss-card__preview-graph::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    height: 60px;
+    bottom: 0;
+    background:
+        linear-gradient(180deg,
+            transparent 0%,
+            rgba(255, 170, 0, 0.18) 60%,
+            rgba(255, 170, 0, 0.35) 100%);
+    clip-path: polygon(
+        0% 100%, 5% 70%, 12% 80%, 20% 55%, 28% 65%,
+        36% 40%, 44% 50%, 52% 30%, 60% 45%, 68% 25%,
+        76% 38%, 84% 20%, 92% 32%, 100% 18%, 100% 100%
+    );
+    transform: translateY(-58px);
+}
+
+.ffss-card--dashboard .ffss-card__preview-dots {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    display: flex;
+    gap: 0.4rem;
+    z-index: 3;
+}
+
+.ffss-card--dashboard .ffss-card__preview-dots span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    box-shadow: 0 0 8px currentColor;
+    animation: ffss-dashboard-pulse 2.4s ease-in-out infinite;
+}
+
+.ffss-card--dashboard .ffss-card__preview-dots span:nth-child(1) { color: #00ff66; animation-delay: 0s;   }
+.ffss-card--dashboard .ffss-card__preview-dots span:nth-child(2) { color: #ffaa00; animation-delay: 0.4s; }
+.ffss-card--dashboard .ffss-card__preview-dots span:nth-child(3) { color: #ff3355; animation-delay: 0.8s; }
+
+.ffss-card--dashboard .ffss-card__preview-dots span {
+    background: currentColor;
+}
+
+@keyframes ffss-dashboard-sweep {
+    0%, 100% { opacity: 0.85; transform: scaleX(1); }
+    50%      { opacity: 1;    transform: scaleX(1.04); }
+}
+
+@keyframes ffss-dashboard-pulse {
+    0%, 100% { opacity: 0.4; transform: scale(0.9); }
+    50%      { opacity: 1;   transform: scale(1.15); }
+}
